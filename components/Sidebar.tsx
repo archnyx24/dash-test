@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const DashboardIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -68,6 +68,7 @@ const ChevronDownIcon = () => (
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [expandedItems, setExpandedItems] = React.useState<string[]>(['admin']);
 
   const navigationItems = [
@@ -150,7 +151,12 @@ export default function Sidebar() {
                     onClick={(e) => {
                       if (hasSubmenu) {
                         e.preventDefault();
-                        toggleExpand(item.id);
+                        // Expand the menu
+                        if (!isExpanded) {
+                          setExpandedItems(prev => [...prev, item.id]);
+                        }
+                        // Navigate to first submenu
+                        router.push(item.submenus[0].href);
                       }
                     }}
                     className={`flex items-center gap-3 px-4 py-3 transition-all ${
