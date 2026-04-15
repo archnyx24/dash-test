@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
@@ -191,11 +191,11 @@ const CustomPopup = ({ vehicle, onViewLogs }: { vehicle: VehicleData; onViewLogs
 export default function FleetMap() {
   const router = useRouter();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const style = document.createElement('style');
     style.textContent = popupStyles;
     document.head.appendChild(style);
-    return () => document.head.removeChild(style);
+    return () => void document.head.removeChild(style);
   }, []);
 
   const handleViewLogs = (vehicle: VehicleData) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import TopBar from "@/components/TopBar";
@@ -41,7 +41,7 @@ interface OrderData {
   amount: number;
 }
 
-export default function CreateInvoice() {
+function CreateInvoiceContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedOrders, setSelectedOrders] = useState<OrderData[]>([]);
@@ -284,5 +284,13 @@ export default function CreateInvoice() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function CreateInvoice() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+      <CreateInvoiceContent />
+    </Suspense>
   );
 }

@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import dynamic from 'next/dynamic';
+import dynamicImport from 'next/dynamic';
 import TopBar from '@/components/TopBar';
 
-const MapPreview = dynamic(() => import('@/components/MapPreview'), { ssr: false });
+const MapPreview = dynamicImport(() => import('@/components/MapPreview'), { ssr: false });
 
 interface ActivityLog {
   id: string;
@@ -19,7 +19,7 @@ interface ActivityLog {
   icon: string;
 }
 
-export default function FleetActivityLogs() {
+function FleetActivityLogsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const driverName = searchParams.get('driver') || 'JARWO';
@@ -223,5 +223,13 @@ export default function FleetActivityLogs() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function FleetActivityLogs() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+      <FleetActivityLogsContent />
+    </Suspense>
   );
 }
